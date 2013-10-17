@@ -28,7 +28,27 @@ void MueveCuadro()
         	}
         	else
         	{
+        		for(int k = 0;k < m; k++)
+        		{
+        			int lleno = 0;
+        			if(a[n][k]==1)
+        			{
+        				lleno = 1;
+        			}
+        			else
+        			{
+        				lleno = 0;
+        			}
+        		}
+        		if(lleno==1)
+        		{
+        			for(int k = 0;k < m; k++)
+        			{
+        				a[n][k] = 0;
+        			}
+        		}
         		a[0][rand() % m]=1;
+        		j = m;
         	}
     	}
 }
@@ -47,6 +67,25 @@ void MueveCuadro()
     }
     else
     {
+    	for(int k = 0;k < m; k++)
+        {
+        	int lleno = 0;
+        	if(a[n][k]==1)
+        	{
+        		lleno = 1;
+        	}
+        	else
+        	{
+        		lleno = 0;
+        	}
+        }
+        if(lleno==1)
+        {
+        	for(int k = 0;k < m; k++)
+        	{
+        		a[pos[0]][k] = 0;
+        	}
+        }
     	pos[0] = 0;
     	pos[1] = rand() % m;
     	a[0][pos[1]]=1;

@@ -12,12 +12,12 @@
 #endif
 #include <stdlib.h>
 #include<stdio.h>
-#define FILAS 15
+#define RENGLONES 15
 #define COLUMNAS 8
 #define WIDTH 300
 #define HEIGHT 500
 
-static int matriz[FILAS][COLUMNAS]  = {0,0,0,0,0,0,0,0,
+static int matriz[COLUMNAS][RENGLONES]  = {0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0,
@@ -33,37 +33,47 @@ static int matriz[FILAS][COLUMNAS]  = {0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0};
 
-int i = rand() % COLUMNAS;
-int j = FILAS-1;
+int x = rand() % COLUMNAS;
+int y = RENGLONES-1;
+
 
 
 void myTimer(int h)
 {
-    matriz[4][5]=4;/*
-	    if(matriz[i][j]==1 && matriz[i][j-1] == 0)
+	    if(matriz[x][y]==1 && matriz[x][y-1] == 0)
         {
-        	matriz[i][j]=0;
-        	matriz[i][j-1]=1;
-        	j-=1;
+            if(y==0){
+                printf("estoy en 0 bitch\n");
+                matriz[x][y]=1;
+                x = rand() % COLUMNAS;
+                y = RENGLONES-1;
+                matriz[x][y]=1;
+                glutPostRedisplay();
+                glutTimerFunc(300,myTimer,1);
+            }
+            else{
+                matriz[x][y]=0;
+                matriz[x][y-1]=1;
+                y-=1;
+                glutPostRedisplay();
+                glutTimerFunc(300,myTimer,1);
+            }
         }
-        else if(matriz[i][j]==1 && matriz[i][j-1] == 1)
+        else if(matriz[x][y]==1 && matriz[x][y-1] == 1 )
         {
-        	i = rand() % COLUMNAS;
-        	matriz[i][j]=1;
-        	j= FILAS-1;
+            matriz[x][y]=1;
+            x = rand() % COLUMNAS;
+        	y = RENGLONES-1;
+        	matriz[x][y]=1;
+        	glutPostRedisplay();
+            glutTimerFunc(300,myTimer,1);
         }
-    	if(j==0){
-            j = FILAS-1;
-            i = rand() % COLUMNAS;
-            matriz[i][j]=1;
-    	}*/
-    	glutTimerFunc(200,myTimer,1);
-    	glutPostRedisplay();
+
 }
 
-bool filaCompleta(int n){
+bool renglonCompleto(int n){
     bool resultado = true;
-    if(n>=0 && n<FILAS){
+    if(n>=0 && n<RENGLONES){
         for(int i=0; i<COLUMNAS; i++){
             if(matriz[i][n]!=1){
                 resultado = false;
@@ -75,22 +85,25 @@ bool filaCompleta(int n){
     return resultado;
 }
 
-void eliminaFila(int n){
+void eliminaRenglon(int n){
+    printf("elimina renglon aqui ando %d\n",n);
     bool encontro = false;
-    if(n>=0 && n<FILAS){
-        for(int i=0; i<FILAS; i++){
-                if(i==n){
+    if(n>=0 && n<RENGLONES){
+        for(int y=0; y<RENGLONES; y++){
+                if(y==n){
                     encontro = true;
+                    printf("Pues lo encontre ahora a borrarlo\n");
                 }
                 if(encontro){
-                    if(i == (FILAS-1)){
-                        for(int j=0; j<COLUMNAS ; j++){
-                                matriz[i][j] = 0;
+                        printf("wuu lo borrare\n");
+                    if(y == (RENGLONES-1)){
+                        for(int x=0; x<COLUMNAS ; x++){
+                                matriz[x][y] = 0;
                         }
                     }
                     else{
-                        for(int j=0; j<COLUMNAS ; j++){
-                                matriz[i][j] = matriz[i+1][j];
+                        for(int x=0; x<COLUMNAS ; x++){
+                                matriz[x][y] = matriz[x][y+1];
                         }
                     }
                 }
@@ -98,38 +111,76 @@ void eliminaFila(int n){
     }
 }
 
-void eliminaFilasCompletas(){
-    for(int i=0; i<FILAS; i++){
-        if(filaCompleta(i))
-            eliminaFila(i);
+void eliminaRenglonesCompletos(){
+    printf("Vine a eliminar\n");
+    for(int i=0; i<RENGLONES; i++){
+        if(renglonCompleto(i)){
+            eliminaRenglon(i);
+            printf("completo el renglon %d\n",i);
+        }
     }
 }
+
+
 
 void display(){
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glColor3f(1.0,0.0,0.5);
-  for(int i=0; i<COLUMNAS; i++){
-    for(int j=0 ; j<FILAS; j++){
-        if(matriz[i][j]==4){
-                printf("La columna %d El renglon %d \n",i, j);/*
+  for(int columna=0; columna<COLUMNAS; columna++){
+    for(int renglon=0 ; renglon<RENGLONES; renglon++){
+        if(matriz[columna][renglon]==1){
+                printf("La columna %d El renglon %d \n",columna, renglon);
             glBegin(GL_QUADS);
-                  glVertex3f(i, j, 1.0);
-                  glVertex3f(i+1, j, 1.0);
-                  glVertex3f(i+1, j+1, 1.0);
-                  glVertex3f(i, j+1, 1.0);
-            glEnd();*/
+                  glVertex3f(columna, renglon, 1.0);
+                  glVertex3f(columna+1, renglon, 1.0);
+                  glVertex3f(columna+1, renglon+1, 1.0);
+                  glVertex3f(columna, renglon+1, 1.0);
+            glEnd();
         }
     }
   }
-  //eliminaFilasCompletas();
+  eliminaRenglonesCompletos();
   glutSwapBuffers();
 }
 
 void init(){
-    glOrtho(0, COLUMNAS, 0, FILAS, -1,1);
+    glMatrixMode(GL_PROJECTION);
+    gluOrtho2D(0, COLUMNAS, 0, RENGLONES);
+    glMatrixMode(GL_MODELVIEW);
+    matriz[x][y]=1;
 }
 
+void keyboard(unsigned char key, int xMouse, int yMouse){
+  switch(key)
+    {
+    case 'd':
+    case 'D':
+      if(x<COLUMNAS){
+        x++;
+        matriz[x][y]=1;
+        matriz[x-1][y]=0;
+        glutPostRedisplay();
+            glutTimerFunc(300,myTimer,1);
+      }
+      break;
+
+    case 'a':
+    case 'A':
+      if(x>0){
+        x--;
+        matriz[x][y]=1;
+        matriz[x+1][y]=0;
+        glutPostRedisplay();
+            glutTimerFunc(300,myTimer,1);
+      }
+      break;
+
+    case 27:   // escape
+      exit(0);
+      break;
+    }
+}
 
 int main(int argc, char **argv){
   glutInit(&argc, argv);
@@ -139,6 +190,7 @@ int main(int argc, char **argv){
   glutCreateWindow("Tetris prueba");
   init();
   glutTimerFunc(200,myTimer,1);
+  glutKeyboardFunc(keyboard);
   glutDisplayFunc(display);
   glutMainLoop();
   return 0;

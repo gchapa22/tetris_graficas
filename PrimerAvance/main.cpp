@@ -33,21 +33,32 @@ static int matriz[COLUMNAS][RENGLONES]  = {0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0};
 
-int x = rand() % COLUMNAS;
+int x = 0;
 int y = RENGLONES-1;
+bool colision = false;
+bool lleno = false;
 
 
 
 void myTimer(int h)
 {
-	    if(matriz[x][y]==1 && matriz[x][y-1] == 0)
+        if(lleno){
+            lleno = false;
+            x = rand() % COLUMNAS;
+            y = RENGLONES-1;
+            matriz[x][y]=1;
+        }
+        else if(colision){
+            colision = false;
+            x = rand() % COLUMNAS;
+            y = RENGLONES-1;
+            matriz[x][y]=1;
+        }
+        if(matriz[x][y]==1 && matriz[x][y-1] == 0)
         {
             if(y==0){
-                printf("estoy en 0 bitch\n");
                 matriz[x][y]=1;
-                x = rand() % COLUMNAS;
-                y = RENGLONES-1;
-                matriz[x][y]=1;
+                colision = true;
                 glutPostRedisplay();
                 glutTimerFunc(300,myTimer,1);
             }
@@ -62,9 +73,7 @@ void myTimer(int h)
         else if(matriz[x][y]==1 && matriz[x][y-1] == 1 )
         {
             matriz[x][y]=1;
-            x = rand() % COLUMNAS;
-        	y = RENGLONES-1;
-        	matriz[x][y]=1;
+        	colision = true;
         	glutPostRedisplay();
             glutTimerFunc(300,myTimer,1);
         }
@@ -86,37 +95,34 @@ bool renglonCompleto(int n){
 }
 
 void eliminaRenglon(int n){
-    printf("elimina renglon aqui ando %d\n",n);
     bool encontro = false;
     if(n>=0 && n<RENGLONES){
-        for(int y=0; y<RENGLONES; y++){
-                if(y==n){
+        for(int r=0; r<RENGLONES; r++){
+                if(r==n){
                     encontro = true;
-                    printf("Pues lo encontre ahora a borrarlo\n");
                 }
                 if(encontro){
-                        printf("wuu lo borrare\n");
-                    if(y == (RENGLONES-1)){
+                    if(r == (RENGLONES-1)){
                         for(int x=0; x<COLUMNAS ; x++){
-                                matriz[x][y] = 0;
+                                matriz[x][r] = 0;
                         }
                     }
                     else{
                         for(int x=0; x<COLUMNAS ; x++){
-                                matriz[x][y] = matriz[x][y+1];
+                                matriz[x][r] = matriz[x][r+1];
+
                         }
                     }
                 }
-            }
+        }
     }
 }
 
 void eliminaRenglonesCompletos(){
-    printf("Vine a eliminar\n");
     for(int i=0; i<RENGLONES; i++){
         if(renglonCompleto(i)){
+            lleno = true;
             eliminaRenglon(i);
-            printf("completo el renglon %d\n",i);
         }
     }
 }
@@ -130,7 +136,6 @@ void display(){
   for(int columna=0; columna<COLUMNAS; columna++){
     for(int renglon=0 ; renglon<RENGLONES; renglon++){
         if(matriz[columna][renglon]==1){
-                printf("La columna %d El renglon %d \n",columna, renglon);
             glBegin(GL_QUADS);
                   glVertex3f(columna, renglon, 1.0);
                   glVertex3f(columna+1, renglon, 1.0);
@@ -140,7 +145,9 @@ void display(){
         }
     }
   }
-  eliminaRenglonesCompletos();
+  if(colision){
+    eliminaRenglonesCompletos();
+  }
   glutSwapBuffers();
 }
 
@@ -148,6 +155,8 @@ void init(){
     glMatrixMode(GL_PROJECTION);
     gluOrtho2D(0, COLUMNAS, 0, RENGLONES);
     glMatrixMode(GL_MODELVIEW);
+    srand(time_t());
+    x= rand() % COLUMNAS;
     matriz[x][y]=1;
 }
 
@@ -156,12 +165,10 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
     {
     case 'd':
     case 'D':
-      if(x<COLUMNAS){
+      if(x<COLUMNAS-1){
         x++;
         matriz[x][y]=1;
         matriz[x-1][y]=0;
-        glutPostRedisplay();
-            glutTimerFunc(300,myTimer,1);
       }
       break;
 
@@ -171,8 +178,6 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
         x--;
         matriz[x][y]=1;
         matriz[x+1][y]=0;
-        glutPostRedisplay();
-            glutTimerFunc(300,myTimer,1);
       }
       break;
 

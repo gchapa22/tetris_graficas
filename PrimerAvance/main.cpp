@@ -4,7 +4,7 @@
 
 */
 
-#include<windows.h>
+#include <windows.h>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -159,7 +159,7 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
     {
     case 'd':
     case 'D':
-      if(x<COLUMNAS-1){
+      if(x<COLUMNAS-1 && matriz[x+1][y]==0){
         x++;
         matriz[x][y]=1;
         matriz[x-1][y]=0;
@@ -168,10 +168,18 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
 
     case 'a':
     case 'A':
-      if(x>0){
+      if(x>0 && matriz[x-1][y]==0){
         x--;
         matriz[x][y]=1;
         matriz[x+1][y]=0;
+      }
+      break;
+    case 's':
+    case 'S':
+      if(y>0 && matriz[x][y-1]==0){
+        y--;
+        matriz[x][y]=1;
+        matriz[x][y+1]=0;
       }
       break;
 
@@ -194,3 +202,11 @@ int main(int argc, char **argv){
   glutMainLoop();
   return 0;
 }
+
+
+
+
+
+
+
+

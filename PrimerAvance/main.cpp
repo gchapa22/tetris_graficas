@@ -42,18 +42,13 @@ bool lleno = false;
 
 void myTimer(int h)
 {
-        if(lleno){
-            lleno = false;
-            x = rand() % COLUMNAS;
-            y = RENGLONES-1;
-            matriz[x][y]=1;
-        }
-        else if(colision){
+        if(lleno || colision){
             colision = false;
+            lleno=false;
             x = rand() % COLUMNAS;
             y = RENGLONES-1;
             matriz[x][y]=1;
-        }
+          }
         if(matriz[x][y]==1 && matriz[x][y-1] == 0)
         {
             if(y==0){
@@ -72,10 +67,10 @@ void myTimer(int h)
         }
         else if(matriz[x][y]==1 && matriz[x][y-1] == 1 )
         {
-            matriz[x][y]=1;
-        	colision = true;
-        	glutPostRedisplay();
-            glutTimerFunc(300,myTimer,1);
+          matriz[x][y]=1;
+          colision = true;
+          glutPostRedisplay();
+          glutTimerFunc(300,myTimer,1);
         }
 
 }
@@ -156,7 +151,6 @@ void init(){
     gluOrtho2D(0, COLUMNAS, 0, RENGLONES);
     glMatrixMode(GL_MODELVIEW);
     srand(time_t());
-    x= rand() % COLUMNAS;
     matriz[x][y]=1;
 }
 
@@ -200,11 +194,3 @@ int main(int argc, char **argv){
   glutMainLoop();
   return 0;
 }
-
-
-
-
-
-
-
-

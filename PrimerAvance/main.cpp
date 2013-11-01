@@ -42,60 +42,76 @@ bool colision = false;
 bool lleno = false;
 int puntos = 0;
 
+int opcion = 0;
+int pause = 0;
+
+void limpia()
+{
+  for(int x=0; x<COLUMNAS; x++){
+        for(int y=0;y<RENGLONES; y++)
+        {
+          matriz[x][y] = 0;
+        }
+      }
+}
 
 void myTimer(int h)
 {
-  if(y<RENGLONES-1 || !colision)
+  if(pause==0)
   {
-        if(lleno || colision){
-            colision = false;
-            lleno=false;
-            x = rand() % COLUMNAS;
-            y = RENGLONES-1;
-            matriz[x][y]=1;
+    if(y<RENGLONES-1 || !colision)
+    {
+          if(lleno || colision){
+              colision = false;
+              lleno=false;
+              x = rand() % COLUMNAS;
+              y = RENGLONES-1;
+              matriz[x][y]=1;
+            }
+          if(matriz[x][y]==1 && matriz[x][y-1] == 0)
+          {
+              if(y==0){
+                  matriz[x][y]=1;
+                  colision = true;
+                  glutPostRedisplay();
+                  glutTimerFunc(300,myTimer,1);
+              }
+              else{
+                  matriz[x][y]=0;
+                  matriz[x][y-1]=1;
+                  y-=1;
+                  glutPostRedisplay();
+                  glutTimerFunc(300,myTimer,1);
+              }
           }
-        if(matriz[x][y]==1 && matriz[x][y-1] == 0)
-        {
-            if(y==0){
-                matriz[x][y]=1;
-                colision = true;
-                glutPostRedisplay();
-                glutTimerFunc(300,myTimer,1);
-            }
-            else{
-                matriz[x][y]=0;
-                matriz[x][y-1]=1;
-                y-=1;
-                glutPostRedisplay();
-                glutTimerFunc(300,myTimer,1);
-            }
-        }
-        else if(matriz[x][y]==1 && matriz[x][y-1] == 1 )
-        {
-          matriz[x][y]=1;
-          colision = true;
-          glutPostRedisplay();
-          glutTimerFunc(300,myTimer,1);
-        }
-  }
-  else
-  {
-    for(int x=0; x<COLUMNAS; x++){
-      for(int y=0;y<RENGLONES; y++)
-      {
-        matriz[x][y] = 0;
-      }
+          else if(matriz[x][y]==1 && matriz[x][y-1] == 1 )
+          {
+            matriz[x][y]=1;
+            colision = true;
+            glutPostRedisplay();
+            glutTimerFunc(300,myTimer,1);
+          }
     }
-    // std::stringstream ss;//create a stringstream
-    // ss << puntos;//add number to the stream
-    // char *mensaje = "Tu puntuacion es de: " + (char) ss.str(); 
-    // int len = (int) strlen(mensaje);
-    // for (int i = 0; i < len; i++) 
-    // {
-    //   glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, mensaje[i]);
-    // }
-    glutPostRedisplay();
+    else
+    {
+      limpia();
+      std::ofstream log("scores.txt", std::ios_base::app | std::ios_base::out);
+      log << puntos << std::endl;
+      // std::stringstream ss;//create a stringstream
+      // ss << puntos;//add number to the stream
+      // char *mensaje = "Tu puntuacion es de: " + (char) ss.str(); 
+      // int len = (int) strlen(mensaje);
+      // for (int i = 0; i < len; i++) 
+      // {
+      //   glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, mensaje[i]);
+      // }
+      glutPostRedisplay();
+    }
   }
+else if(pause==1)
+{
+  glutPostRedisplay();
+}
   
 }
 
@@ -142,9 +158,9 @@ void eliminaRenglonesCompletos(){
         if(renglonCompleto(i)){
             lleno = true;
             eliminaRenglon(i);
+            puntos+=100;
         }
     }
-    puntos+=100;
 }
 
 
@@ -214,6 +230,54 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
     }
 }
 
+void procesaMenu(int val){
+  switch(val)
+  {
+    case 10:
+      exit(0);
+    break;
+
+    case 20:
+      limpia();
+      puntos=0;
+      x = rand() % COLUMNAS;
+      y = RENGLONES-1;
+      matriz[x][y]=1;
+    break;
+
+    case 30:
+    exit(0);
+    break;
+
+    case 40:
+    exit(0);
+    break;
+
+    default:
+    break;
+  }
+}
+
+int addMenues(){
+  int mainMenu;
+  mainMenu = glutCreateMenu(procesaMenu);
+  glutSetMenu(mainMenu);
+  glutAddMenuEntry("Salir", 10);
+  glutAddMenuEntry("Nuevo Juego", 20);
+  glutAddMenuEntry("Scoreboard", 30);
+  glutAddMenuEntry("Creditos", 40);
+  glutSetMenu(mainMenu);
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+void mouse(int button, int state, int x, int y){
+  if(button == GLUT_RIGHT_BUTTON){
+    if(state == GLUT_DOWN){
+      pause = 1;
+    }
+  }
+}
+
 int main(int argc, char **argv){
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
@@ -224,14 +288,7 @@ int main(int argc, char **argv){
   glutTimerFunc(200,myTimer,1);
   glutKeyboardFunc(keyboard);
   glutDisplayFunc(display);
+  addMenues();
   glutMainLoop();
   return 0;
 }
-
-
-
-
-
-
-
-

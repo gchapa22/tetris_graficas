@@ -3,8 +3,11 @@
     Norma Escobedo -805387
 
 */
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string.h>
 
-#include <windows.h>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -33,15 +36,17 @@ static int matriz[COLUMNAS][RENGLONES]  = {0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0};
 
-int x = 0;
+int x = 1;
 int y = RENGLONES-1;
 bool colision = false;
 bool lleno = false;
-
+int puntos = 0;
 
 
 void myTimer(int h)
 {
+  if(y<RENGLONES-1 || !colision)
+  {
         if(lleno || colision){
             colision = false;
             lleno=false;
@@ -72,7 +77,26 @@ void myTimer(int h)
           glutPostRedisplay();
           glutTimerFunc(300,myTimer,1);
         }
-
+  }
+  else
+  {
+    for(int x=0; x<COLUMNAS; x++){
+      for(int y=0;y<RENGLONES; y++)
+      {
+        matriz[x][y] = 0;
+      }
+    }
+    // std::stringstream ss;//create a stringstream
+    // ss << puntos;//add number to the stream
+    // char *mensaje = "Tu puntuacion es de: " + (char) ss.str(); 
+    // int len = (int) strlen(mensaje);
+    // for (int i = 0; i < len; i++) 
+    // {
+    //   glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, mensaje[i]);
+    // }
+    glutPostRedisplay();
+  }
+  
 }
 
 bool renglonCompleto(int n){
@@ -120,6 +144,7 @@ void eliminaRenglonesCompletos(){
             eliminaRenglon(i);
         }
     }
+    puntos+=100;
 }
 
 

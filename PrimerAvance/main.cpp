@@ -45,6 +45,81 @@ int puntos = 0;
 int opcion = 0;
 int pause = 0;
 
+// //Clase cuadro-------------------------------
+// class Cuadro()
+// {
+//   int x, y;
+//   public:
+//     Cuadro(int, int);
+
+//    void setxy(int, int);
+//    void setx(int);
+//    void sety(int);
+
+//    int getx();
+//    int gety();
+
+//    void baja();
+//    void mueveIzq();
+//    void mueveDer();
+// }
+
+// void Cuadro::Cuadro(int a, int b) {
+//   x = a;
+//   y = b;
+// }
+
+// void Cuadro::setxy(int a, int b) {
+//   x = a;
+//   y = b;
+// }
+
+// void Cuadro::setx(int a) {
+//   x = a;
+// }
+
+// void Cuadro::sety(int b) {
+//   y = b;
+// }
+
+// void Cuadro::getx() {
+//   return x;
+// }
+
+// void Cuadro::gety(){
+//   return y;
+// }
+
+// void Cuadro::baja() {
+//   y++;
+// }
+
+// void Cuadro::mueveIzq() {
+//   x--;
+// }
+
+// void Cuadro::mueveDer() {
+//   x++;
+// }
+// //--------------------------------------------
+
+// //Clase figura--------------------------------
+// class Figura()
+// {
+//   Cuadro uno, dos, tres, cuatro;
+//   int color[3];
+//   public:
+//     void baja();
+// }
+
+// void Figura::baja() {
+//   uno.baja();
+//   dos.baja();
+//   tres.baja();
+//   cuatro.baja();
+// }
+// //---------------------------------------------
+
 void limpia()
 {
   for(int x=0; x<COLUMNAS; x++){

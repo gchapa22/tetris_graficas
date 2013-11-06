@@ -37,6 +37,8 @@ static int matriz[COLUMNAS][RENGLONES]  = {0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0,
                                         0,0,0,0,0,0,0,0};
 
+GLfloat diffuseMaterial[4] = { 1.0, 0.0, 0.5, 1.0 };
+
 int x = 1;
 int y = RENGLONES-1;
 bool colision = false;
@@ -286,6 +288,21 @@ void init(){
     //srand(time_t());
     x= rand() % COLUMNAS;
     matriz[x][y]=1;
+    GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+    glShadeModel (GL_FLAT);  //Flat para que se vea mejor
+    glEnable(GL_DEPTH_TEST);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseMaterial);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, 125.0);
+
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    glColorMaterial(GL_FRONT, GL_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
+    glColor4fv(diffuseMaterial);
 }
 
 void keyboard(unsigned char key, int xMouse, int yMouse){

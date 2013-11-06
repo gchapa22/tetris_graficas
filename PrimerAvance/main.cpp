@@ -3,6 +3,7 @@
     Norma Escobedo -805387
 
 */
+#include <windows.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -174,9 +175,9 @@ void myTimer(int h)
       log << puntos << std::endl;
       // std::stringstream ss;//create a stringstream
       // ss << puntos;//add number to the stream
-      // char *mensaje = "Tu puntuacion es de: " + (char) ss.str(); 
+      // char *mensaje = "Tu puntuacion es de: " + (char) ss.str();
       // int len = (int) strlen(mensaje);
-      // for (int i = 0; i < len; i++) 
+      // for (int i = 0; i < len; i++)
       // {
       //   glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, mensaje[i]);
       // }
@@ -187,7 +188,7 @@ else if(pause==1)
 {
   glutPostRedisplay();
 }
-  
+
 }
 
 bool renglonCompleto(int n){
@@ -244,15 +245,34 @@ void display(){
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glColor3f(1.0,0.0,0.5);
+  glBegin(GL_LINES);
+        glVertex3i(COLUMNAS, 0, 0);
+        glVertex3i(COLUMNAS, RENGLONES, 0);
+        glVertex3i(0, RENGLONES, 0);
+        glVertex3i(COLUMNAS, RENGLONES, 0);
+    glEnd();
   for(int columna=0; columna<COLUMNAS; columna++){
+    glBegin(GL_LINES);
+        glVertex3i(columna, 0, 0);
+        glVertex3i(columna, RENGLONES, 0);
+    glEnd();
     for(int renglon=0 ; renglon<RENGLONES; renglon++){
+        glBegin(GL_LINES);
+            glVertex3i(0, renglon, 0);
+            glVertex3i(COLUMNAS, renglon, 0);
+        glEnd();
         if(matriz[columna][renglon]==1){
+                /*
             glBegin(GL_QUADS);
                   glVertex3f(columna, renglon, 1.0);
                   glVertex3f(columna+1, renglon, 1.0);
                   glVertex3f(columna+1, renglon+1, 1.0);
                   glVertex3f(columna, renglon+1, 1.0);
-            glEnd();
+            glEnd();*/
+            glPushMatrix();
+                glTranslated(columna + 0.5, renglon+0.5, 0);
+                glutSolidCube(1);
+            glPopMatrix();
         }
     }
   }
@@ -263,10 +283,8 @@ void display(){
 }
 
 void init(){
-    glMatrixMode(GL_PROJECTION);
-    gluOrtho2D(0, COLUMNAS, 0, RENGLONES);
-    glMatrixMode(GL_MODELVIEW);
-    srand(time_t());
+    //srand(time_t());
+    x= rand() % COLUMNAS;
     matriz[x][y]=1;
 }
 
@@ -353,13 +371,27 @@ void mouse(int button, int state, int x, int y){
   }
 }
 
+void myReshape(int ancho, int alto)
+{
+    glEnable(GL_DEPTH_TEST);
+    //glViewport(0, 0, ancho, alto); /* Ventana */
+    glMatrixMode(GL_PROJECTION); /* Sistema de coordenadas */
+    glLoadIdentity();
+    glOrtho(-2, COLUMNAS+2, -2, RENGLONES+2,-10,10); /* izq, der, abajo, arriba, cerca, lejos */
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glFrustum(0, COLUMNAS, 0, RENGLONES, -1, 1);
+    gluLookAt(0,0,0, 2,-2,-1,0, 1, 0);
+}
+
 int main(int argc, char **argv){
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+  glutInitDisplayMode(GLUT_DOUBLE |GLUT_DEPTH| GLUT_RGB);
   glutInitWindowPosition(50, 50);
   glutInitWindowSize(WIDTH, HEIGHT);
   glutCreateWindow("Tetris prueba");
   init();
+  glutReshapeFunc(myReshape);
   glutTimerFunc(200,myTimer,1);
   glutKeyboardFunc(keyboard);
   glutDisplayFunc(display);

@@ -1,9 +1,9 @@
 /*
-    Gerardo Chapa  -800249
-    Norma Escobedo -805387
-
-*/
-#include <windows.h>
+ Gerardo Chapa  -800249
+ Norma Escobedo -805387
+ 
+ */
+//#include <windows.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -18,276 +18,551 @@
 #include<stdio.h>
 #define RENGLONES 15
 #define COLUMNAS 8
-#define WIDTH 300
-#define HEIGHT 500
+#define WIDTH 500
+#define HEIGHT 700
 
 static int matriz[COLUMNAS][RENGLONES]  = {0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0,
-                                        0,0,0,0,0,0,0,0};
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0};
 
 GLfloat diffuseMaterial[4] = { 1.0, 0.0, 0.5, 1.0 };
 
-int x = 1;
-int y = RENGLONES-1;
+int pos[4][2] = {0,0,0,0,
+                  0,0,0,0};
+
+int checaAbajo[3] = {0,0,0};
+int checaArriba[3] = {0,0,0};
+int checaIzq[4] = {0,0,0,0};
+int checaDer[4] = {0,0,0,0};
+
+int figura = 0;
+int figuraSiguiente = 0;
+
+int entraTimer = 0;
+int velocidad = 500;
+
 bool colision = false;
 bool lleno = false;
-int puntos = 0;
+int puntos = 0, vuelta=0;
 
 int opcion = 0;
 int pause = 0;
 
-// //Clase cuadro-------------------------------
-// class Cuadro()
-// {
-//   int x, y;
-//   public:
-//     Cuadro(int, int);
+void figuraO(int a, int b)
+{
+  checaAbajo[0] = 2;
+  checaAbajo[1] = 3; 
+  checaAbajo[2] = 2; 
 
-//    void setxy(int, int);
-//    void setx(int);
-//    void sety(int);
+  checaArriba[0] = 0;
+  checaArriba[1] = 1;
+  checaArriba[2] = 0;
 
-//    int getx();
-//    int gety();
+  checaIzq[0] = 0;
+  checaIzq[1] = 2;
+  checaIzq[2] = 0;
+  checaIzq[3] = 2;
 
-//    void baja();
-//    void mueveIzq();
-//    void mueveDer();
-// }
+  checaDer[0] = 1;
+  checaDer[1] = 3;
+  checaDer[2] = 1;
+  checaDer[3] = 3;
 
-// void Cuadro::Cuadro(int a, int b) {
-//   x = a;
-//   y = b;
-// }
+  pos[0][0] = a;
+  pos[0][1] = b;
 
-// void Cuadro::setxy(int a, int b) {
-//   x = a;
-//   y = b;
-// }
+  pos[1][0] = a+1;
+  pos[1][1] = b;
 
-// void Cuadro::setx(int a) {
-//   x = a;
-// }
+  pos[2][0] = a;
+  pos[2][1] = b-1;
 
-// void Cuadro::sety(int b) {
-//   y = b;
-// }
+  pos[3][0] = a+1;
+  pos[3][1] = b-1;
 
-// void Cuadro::getx() {
-//   return x;
-// }
+  matriz[a][b] = 1;
+  matriz[a+1][b] = 1;
+  matriz[a][b-1] = 1;
+  matriz[a+1][b-1] = 1;
+}
 
-// void Cuadro::gety(){
-//   return y;
-// }
+void figuraI(int a, int b)
+{
+  checaAbajo[0] = 3;
+  checaAbajo[1] = 3;
+  checaAbajo[2] = 3; 
 
-// void Cuadro::baja() {
-//   y++;
-// }
+  checaArriba[0] = 0;
+  checaArriba[1] = 0;
+  checaArriba[2] = 0;
 
-// void Cuadro::mueveIzq() {
-//   x--;
-// }
+  checaIzq[0] = 0;
+  checaIzq[1] = 1;
+  checaIzq[2] = 2;
+  checaIzq[3] = 3;
 
-// void Cuadro::mueveDer() {
-//   x++;
-// }
-// //--------------------------------------------
+  checaDer[0] = 0;
+  checaDer[1] = 1;
+  checaDer[2] = 2;
+  checaDer[3] = 3;
 
-// //Clase figura--------------------------------
-// class Figura()
-// {
-//   Cuadro uno, dos, tres, cuatro;
-//   int color[3];
-//   public:
-//     void baja();
-// }
+  pos[0][0] = a;
+  pos[0][1] = b;
 
-// void Figura::baja() {
-//   uno.baja();
-//   dos.baja();
-//   tres.baja();
-//   cuatro.baja();
-// }
-// //---------------------------------------------
+  pos[1][0] = a;
+  pos[1][1] = b-1;
+
+  pos[2][0] = a;
+  pos[2][1] = b-2;
+
+  pos[3][0] = a;
+  pos[3][1] = b-3;
+
+  matriz[a][b] = 2;
+  matriz[a][b-1] = 2;
+  matriz[a][b-2] = 2;
+  matriz[a][b-3] = 2;
+}
+
+void figuraL(int a, int b)
+{
+  checaAbajo[0] = 3;
+  checaAbajo[1] = 3;
+  checaAbajo[2] = 2; 
+
+  checaArriba[0] = 0;
+  checaArriba[1] = 3;
+  checaArriba[2] = 0;
+
+  checaIzq[0] = 0;
+  checaIzq[1] = 1;
+  checaIzq[2] = 2;
+  checaIzq[3] = 0;
+
+  checaDer[0] = 0;
+  checaDer[1] = 1;
+  checaDer[2] = 3;
+  checaDer[3] = 3;
+
+  pos[0][0] = a;
+  pos[0][1] = b;
+
+  pos[1][0] = a;
+  pos[1][1] = b-1;
+
+  pos[2][0] = a;
+  pos[2][1] = b-2;
+
+  pos[3][0] = a+1;
+  pos[3][1] = b-2;
+
+  matriz[a][b] = 3;
+  matriz[a][b-1] = 3;
+  matriz[a][b-2] = 3;
+  matriz[a+1][b-2] = 3;
+}
+
+void figuraJ(int a, int b)
+{
+  checaAbajo[0] = 3;
+  checaAbajo[1] = 3;
+  checaAbajo[2] = 2; 
+
+  checaArriba[0] = 0;
+  checaArriba[1] = 3;
+  checaArriba[2] = 0;
+
+  checaIzq[0] = 0;
+  checaIzq[1] = 1;
+  checaIzq[2] = 3;
+  checaIzq[3] = 0;
+
+  checaDer[0] = 0;
+  checaDer[1] = 1;
+  checaDer[2] = 2;
+  checaDer[3] = 0;
+
+  pos[0][0] = a;
+  pos[0][1] = b;
+
+  pos[1][0] = a;
+  pos[1][1] = b-1;
+
+  pos[2][0] = a;
+  pos[2][1] = b-2;
+
+  pos[3][0] = a-1;
+  pos[3][1] = b-2;
+
+  matriz[a][b] = 4;
+  matriz[a][b-1] = 4;
+  matriz[a][b-2] = 4;
+  matriz[a-1][b-2] = 4;
+}
+
+void figuraS(int a, int b)
+{
+  checaAbajo[0] = 3;
+  checaAbajo[1] = 2;
+  checaAbajo[2] = 1; 
+
+  checaArriba[0] = 0;
+  checaArriba[1] = 1;
+  checaArriba[2] = 3;
+
+  checaIzq[0] = 0;
+  checaIzq[1] = 0;
+  checaIzq[2] = 3;
+  checaIzq[3] = 3;
+
+  checaDer[0] = 1;
+  checaDer[1] = 1;
+  checaDer[2] = 2;
+  checaDer[3] = 2;
+
+  pos[0][0] = a;
+  pos[0][1] = b;
+
+  pos[1][0] = a+1;
+  pos[1][1] = b;
+
+  pos[2][0] = a;
+  pos[2][1] = b-1;
+
+  pos[3][0] = a-1;
+  pos[3][1] = b-1;
+
+  matriz[a][b] = 5;
+  matriz[a+1][b] = 5;
+  matriz[a][b-1] = 5;
+  matriz[a-1][b-1] = 5;
+}
+
+void figuraT(int a, int b)
+{
+  checaAbajo[0] = 3;
+  checaAbajo[1] = 2;
+  checaAbajo[2] = 0; 
+
+  checaArriba[0] = 0;
+  checaArriba[1] = 1;
+  checaArriba[2] = 3;
+
+  checaIzq[0] = 0;
+  checaIzq[1] = 0;
+  checaIzq[2] = 3;
+  checaIzq[3] = 3;
+
+  checaDer[0] = 2;
+  checaDer[1] = 2;
+  checaDer[2] = 3;
+  checaDer[3] = 3;
+
+  pos[0][0] = a;
+  pos[0][1] = b;
+
+  pos[1][0] = a+1;
+  pos[1][1] = b;
+
+  pos[2][0] = a+2;
+  pos[2][1] = b;
+
+  pos[3][0] = a+1;
+  pos[3][1] = b-1;
+
+  matriz[a][b] = 6;
+  matriz[a+1][b] = 6;
+  matriz[a+2][b] = 6;
+  matriz[a+1][b-1] = 6;
+}
+
+void nuevafigura()
+{
+  pos[0][0] = rand() % (COLUMNAS-3);
+  pos[0][0]++;
+  pos[0][1] = RENGLONES-1;
+  if(entraTimer<=1)
+  {
+    figura = rand() % 6;
+  }
+  else
+  {
+    figura = figuraSiguiente;
+  }
+  figura=0;
+  figuraSiguiente = rand() % 6;
+  
+  printf("Figura------------");
+  switch(figura)
+  {
+    case 0:
+    printf("1\n");
+    figuraO(pos[0][0],pos[0][1]);
+    break;
+    case 1:
+    printf("2\n");
+    figuraI(pos[0][0],pos[0][1]);
+    break;
+    case 2:
+    printf("3\n");
+    figuraL(pos[0][0],pos[0][1]);
+    break;
+    case 3:
+    printf("4\n");
+    figuraJ(pos[0][0],pos[0][1]);
+    break;
+    case 4:
+    printf("5\n");
+    figuraS(pos[0][0],pos[0][1]);
+    break;
+    case 5:
+    printf("6\n");
+    figuraT(pos[0][0],pos[0][1]);
+    break;
+    default:
+    printf("Ninguno\n");
+    break;
+  }
+}
 
 void limpia()
 {
-  for(int x=0; x<COLUMNAS; x++){
+    for(int x=0; x<COLUMNAS; x++){
         for(int y=0;y<RENGLONES; y++)
         {
-          matriz[x][y] = 0;
+            matriz[x][y] = 0;
+        }
+    }
+}
+
+void imprime()
+{
+  for(int y=0; y<RENGLONES; y++){
+        for(int x=0;x<COLUMNAS; x++)
+        {
+          printf("%d, ",matriz[x][y]);
+        }
+        printf("\n");
+      }
+}
+
+void imprimePos()
+{
+  for(int y=0; y<2; y++){
+        for(int x=0;x<4; x++)
+        {
+          printf("%d, ",pos[x][y]);
+        }
+        printf("\n");
+      }
+}
+
+void imprimePosMatMenos()
+{
+  printf("Pos Mat\n");
+  printf("%d\n", matriz[pos[0][0]][pos[0][1]-1]); 
+  printf("%d\n", matriz[pos[1][0]][pos[1][1]-1]);
+  printf("%d\n", matriz[pos[2][0]][pos[2][1]-1]);
+  printf("%d\n", matriz[pos[3][0]][pos[3][1]-1]);
+  printf("////////////////////////////////\n");
+}
+
+void imprimeChecaAbajoMenos()
+{
+  printf("Checa Abajo------------------\n");
+  printf("%d\n", pos[checaAbajo[0]][1]);
+  printf("%d\n", pos[checaAbajo[1]][1]);
+  printf("%d\n", pos[checaAbajo[2]][1]);
+  printf("Checa Menos------------------\n");
+  printf("%d\n", pos[checaAbajo[0]][1]-1);
+  printf("%d\n", pos[checaAbajo[1]][1]-1);
+  printf("%d\n", pos[checaAbajo[2]][1]-1);
+}
+
+void eliminaRenglonesCompletos(){
+    bool lleno=true;
+      for(int x=0; x<RENGLONES; x++){
+        lleno=true;
+        for(int y=0;y<COLUMNAS; y++)
+        {
+          if(matriz[y][x]==0)
+            lleno = false;
+        }
+        if(lleno)
+        {
+          puntos+=100;
+          for(int y=0;y<COLUMNAS; y++)
+          {
+            matriz[y][x]= matriz[y][x+1];
+            matriz[y][x+1]=0;
+          }
+          lleno = true;
+          velocidad/=1.2;
         }
       }
 }
 
 void myTimer(int h)
 {
-  if(pause==0)
-  {
-    if(y<RENGLONES-1 || !colision)
+    entraTimer+=1;
+    imprime();
+    printf("------------------------------------\n");
+    if(pause==0)
     {
-          if(lleno || colision){
-              colision = false;
-              lleno=false;
-              x = rand() % COLUMNAS;
-              y = RENGLONES-1;
-              matriz[x][y]=1;
+        if((pos[checaArriba[0]][1]<RENGLONES-1 && 
+          pos[checaArriba[1]][1]<RENGLONES-1 && 
+          pos[checaArriba[2]][1]<RENGLONES-1) ||
+          !colision)
+        {
+            if(lleno || colision){
+                colision = false;
+                lleno=false;
+                eliminaRenglonesCompletos();
+                nuevafigura();
             }
-          if(matriz[x][y]==1 && matriz[x][y-1] == 0)
-          {
-              if(y==0){
-                  matriz[x][y]=1;
+            if(matriz[pos[0][0]][pos[0][1]]>0 &&
+            matriz[pos[1][0]][pos[1][1]]>0 &&
+            matriz[pos[2][0]][pos[2][1]]>0 &&
+            matriz[pos[3][0]][pos[3][1]]>0 && 
+            matriz[pos[checaAbajo[0]][0]][pos[checaAbajo[0]][1]-1]==0 &&
+            matriz[pos[checaAbajo[1]][0]][pos[checaAbajo[1]][1]-1]==0 &&
+            matriz[pos[checaAbajo[2]][0]][pos[checaAbajo[2]][1]-1]==0)
+            {
+                if(pos[checaAbajo[0]][1]==0)
+                {
+                    matriz[pos[0][0]][pos[0][1]] = figura+1;
+                  matriz[pos[1][0]][pos[1][1]] = figura+1;
+                  matriz[pos[2][0]][pos[2][1]] = figura+1;
+                  matriz[pos[3][0]][pos[3][1]] = figura+1;
                   colision = true;
                   glutPostRedisplay();
-                  glutTimerFunc(300,myTimer,1);
-              }
-              else{
-                  matriz[x][y]=0;
-                  matriz[x][y-1]=1;
-                  y-=1;
+                  glutTimerFunc(velocidad,myTimer,1);
+                }
+                else{
+                    matriz[pos[0][0]][pos[0][1]] = 0;
+                  matriz[pos[1][0]][pos[1][1]] = 0;
+                  matriz[pos[2][0]][pos[2][1]] = 0;
+                  matriz[pos[3][0]][pos[3][1]] = 0;
+                  matriz[pos[0][0]][pos[0][1]-1] = figura+1;
+                  matriz[pos[1][0]][pos[1][1]-1] = figura+1;
+                  matriz[pos[2][0]][pos[2][1]-1] = figura+1;
+                  matriz[pos[3][0]][pos[3][1]-1] = figura+1;
+                  pos[0][1]-=1;
+                  pos[1][1]-=1;
+                  pos[2][1]-=1;
+                  pos[3][1]-=1;
                   glutPostRedisplay();
-                  glutTimerFunc(300,myTimer,1);
-              }
-          }
-          else if(matriz[x][y]==1 && matriz[x][y-1] == 1 )
-          {
-            matriz[x][y]=1;
-            colision = true;
-            glutPostRedisplay();
-            glutTimerFunc(300,myTimer,1);
-          }
-    }
-    else
-    {
-      limpia();
-      std::ofstream log("scores.txt", std::ios_base::app | std::ios_base::out);
-      log << puntos << std::endl;
-      // std::stringstream ss;//create a stringstream
-      // ss << puntos;//add number to the stream
-      // char *mensaje = "Tu puntuacion es de: " + (char) ss.str();
-      // int len = (int) strlen(mensaje);
-      // for (int i = 0; i < len; i++)
-      // {
-      //   glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, mensaje[i]);
-      // }
-      glutPostRedisplay();
-    }
-  }
-else if(pause==1)
-{
-  glutPostRedisplay();
-}
-
-}
-
-bool renglonCompleto(int n){
-    bool resultado = true;
-    if(n>=0 && n<RENGLONES){
-        for(int i=0; i<COLUMNAS; i++){
-            if(matriz[i][n]!=1){
-                resultado = false;
-                break;
+                  glutTimerFunc(velocidad,myTimer,1);
+                }
+            }
+             else if(matriz[pos[0][0]][pos[0][1]] > 0 &&
+                  matriz[pos[1][0]][pos[1][1]] > 0 &&
+                  matriz[pos[2][0]][pos[2][1]] > 0 &&
+                  matriz[pos[3][0]][pos[3][1]] > 0 &&
+                  (matriz[pos[checaAbajo[0]][0]][pos[checaAbajo[0]][1]-1] > 0 ||
+                  matriz[pos[checaAbajo[1]][0]][pos[checaAbajo[1]][1]-1] > 0 ||
+                  matriz[pos[checaAbajo[3]][0]][pos[checaAbajo[3]][1]-1] > 0))
+            {
+                colision = true;
+                glutPostRedisplay();
+                glutTimerFunc(300,myTimer,1);
             }
         }
-    }
-    else{resultado=false;}
-    return resultado;
-}
-
-void eliminaRenglon(int n){
-    bool encontro = false;
-    if(n>=0 && n<RENGLONES){
-        for(int r=0; r<RENGLONES; r++){
-                if(r==n){
-                    encontro = true;
-                }
-                if(encontro){
-                    if(r == (RENGLONES-1)){
-                        for(int x=0; x<COLUMNAS ; x++){
-                                matriz[x][r] = 0;
-                        }
-                    }
-                    else{
-                        for(int x=0; x<COLUMNAS ; x++){
-                                matriz[x][r] = matriz[x][r+1];
-
-                        }
-                    }
-                }
+        else
+        {
+            printf("perdiste\n");
+              limpia();
+              std::ofstream log("scores.txt", std::ios_base::app | std::ios_base::out);
+              log << puntos << std::endl;
+              glutPostRedisplay();
         }
     }
-}
-
-void eliminaRenglonesCompletos(){
-    for(int i=0; i<RENGLONES; i++){
-        if(renglonCompleto(i)){
-            lleno = true;
-            eliminaRenglon(i);
-            puntos+=100;
-        }
+    else if(pause==1)
+    {
+        printf("pause\n");
+        glutPostRedisplay();
+        glutTimerFunc(velocidad,myTimer,1);
     }
+    
 }
-
 
 
 void display(){
-
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glColor3f(1.0,0.0,0.5);
-  glBegin(GL_LINES);
-        glVertex3i(COLUMNAS, 0, 0);
-        glVertex3i(COLUMNAS, RENGLONES, 0);
-        glVertex3i(0, RENGLONES, 0);
-        glVertex3i(COLUMNAS, RENGLONES, 0);
-    glEnd();
-  for(int columna=0; columna<COLUMNAS; columna++){
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glPushMatrix();
+    switch(vuelta%4){
+        case 0:
+            glRotated(0,0,0,1);
+            break;
+        case 1:
+            glTranslated(RENGLONES/2 + COLUMNAS/2, (RENGLONES/2 - COLUMNAS/2),0);
+            glRotated(90,0,0,1);
+            break;
+        case 2:
+            glTranslated(COLUMNAS, RENGLONES,0);
+            glRotated(180,0,0,1);
+            break;
+        case 3:
+            glTranslated((-RENGLONES/2 + COLUMNAS/2 -1),(RENGLONES/2 + COLUMNAS/2),0);
+            glRotated(-90,0,0,1);
+            break;
+    }
+    
+    glColor3f(1.0,0.0,0.5);
     glBegin(GL_LINES);
+    glVertex2i(0-0.5,0-.5);
+    glVertex2i(0-0.5,RENGLONES+.5);
+    glVertex2i(COLUMNAS+0.5, 0);
+    glVertex2i(COLUMNAS+0.5, RENGLONES);
+    glVertex2i(0, RENGLONES);
+    glVertex2i(COLUMNAS, RENGLONES);
+    glVertex2i(0,0);
+    glVertex2i(COLUMNAS,0);
+    glEnd();
+    
+    glPushMatrix();
+    glRotated(10,0,1,0);
+    glRotated(10,1,0,0);
+    for(int columna=0; columna<COLUMNAS; columna++){
+        /*glBegin(GL_LINES);
         glVertex3i(columna, 0, 0);
         glVertex3i(columna, RENGLONES, 0);
-    glEnd();
-    for(int renglon=0 ; renglon<RENGLONES; renglon++){
-        glBegin(GL_LINES);
+        glEnd();*/
+        for(int renglon=0 ; renglon<RENGLONES; renglon++){
+            /*glBegin(GL_LINES);
             glVertex3i(0, renglon, 0);
             glVertex3i(COLUMNAS, renglon, 0);
-        glEnd();
-        if(matriz[columna][renglon]==1){
-                /*
-            glBegin(GL_QUADS);
-                  glVertex3f(columna, renglon, 1.0);
-                  glVertex3f(columna+1, renglon, 1.0);
-                  glVertex3f(columna+1, renglon+1, 1.0);
-                  glVertex3f(columna, renglon+1, 1.0);
             glEnd();*/
-            glPushMatrix();
+            if(matriz[columna][renglon]==1){
+                glPushMatrix();
                 glTranslated(columna + 0.5, renglon+0.5, 0);
                 glutSolidCube(1);
-            glPopMatrix();
+                glPopMatrix();
+            }
         }
     }
-  }
-  if(colision){
-    eliminaRenglonesCompletos();
-  }
-  glutSwapBuffers();
+    glPopMatrix();
+    glPopMatrix();
+    glutSwapBuffers();
 }
 
 void init(){
     //srand(time_t());
-    x= rand() % COLUMNAS;
-    matriz[x][y]=1;
+    glEnable(GL_DEPTH_TEST);
+    nuevafigura();
     GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
     GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
     glShadeModel (GL_FLAT);  //Flat para que se vea mejor
@@ -295,124 +570,271 @@ void init(){
     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseMaterial);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialf(GL_FRONT, GL_SHININESS, 125.0);
-
+    
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-
+    glClearColor(1, 1, 1, 1);
     glColorMaterial(GL_FRONT, GL_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glColor4fv(diffuseMaterial);
 }
 
+void special(int key, int x, int y){
+    switch (key) {
+        case GLUT_KEY_LEFT:
+           if(pos[checaIzq[0]][0]>0 && 
+            pos[checaIzq[1]][0]>0 && 
+            pos[checaIzq[2]][0]>0 && 
+            pos[checaIzq[3]][0]>0 && 
+            matriz[pos[checaIzq[0]][0]-1][pos[checaIzq[0]][1]]==0 && 
+            matriz[pos[checaIzq[1]][0]-1][pos[checaIzq[1]][1]]==0 && 
+            matriz[pos[checaIzq[2]][0]-1][pos[checaIzq[2]][1]]==0 && 
+            matriz[pos[checaIzq[3]][0]-1][pos[checaIzq[3]][1]]==0)
+            {
+                matriz[pos[0][0]][pos[0][1]]=0;
+                matriz[pos[1][0]][pos[1][1]]=0;
+                matriz[pos[2][0]][pos[2][1]]=0;
+                matriz[pos[3][0]][pos[3][1]]=0;
+
+                pos[0][0]--;
+                pos[1][0]--;
+                pos[2][0]--;
+                pos[3][0]--;
+
+                matriz[pos[0][0]][pos[0][1]]=figura+1;
+                matriz[pos[1][0]][pos[1][1]]=figura+1;
+                matriz[pos[2][0]][pos[2][1]]=figura+1;
+                matriz[pos[3][0]][pos[3][1]]=figura+1;
+            }
+            break;
+        case GLUT_KEY_RIGHT:
+            if(pos[checaDer[0]][0]<COLUMNAS-1 && 
+            pos[checaDer[1]][0]<COLUMNAS-1 && 
+            pos[checaDer[2]][0]<COLUMNAS-1 && 
+            pos[checaDer[3]][0]<COLUMNAS-1 && 
+            matriz[pos[checaDer[0]][0]+1][pos[checaDer[0]][1]]==0 && 
+            matriz[pos[checaDer[1]][0]+1][pos[checaDer[1]][1]]==0 && 
+            matriz[pos[checaDer[2]][0]+1][pos[checaDer[2]][1]]==0 && 
+            matriz[pos[checaDer[3]][0]+1][pos[checaDer[3]][1]]==0)
+            {
+                matriz[pos[0][0]][pos[0][1]]=0;
+                matriz[pos[1][0]][pos[1][1]]=0;
+                matriz[pos[2][0]][pos[2][1]]=0;
+                matriz[pos[3][0]][pos[3][1]]=0;
+
+                pos[0][0]++;
+                pos[1][0]++;
+                pos[2][0]++;
+                pos[3][0]++;
+
+                matriz[pos[0][0]][pos[0][1]]=figura+1;
+                matriz[pos[1][0]][pos[1][1]]=figura+1;
+                matriz[pos[2][0]][pos[2][1]]=figura+1;
+                matriz[pos[3][0]][pos[3][1]]=figura+1;
+              }
+            break;
+        case GLUT_KEY_DOWN:
+			if(pos[0][1]>0 && 
+            pos[1][1]>0 && 
+            pos[2][1]>0 && 
+            pos[3][1]>0 && 
+            matriz[pos[checaAbajo[0]][0]][pos[checaAbajo[0]][1]-1]==0 && 
+            matriz[pos[checaAbajo[1]][0]][pos[checaAbajo[1]][1]-1]==0 && 
+            matriz[pos[checaAbajo[2]][0]][pos[checaAbajo[2]][1]-1]==0 )
+            {
+                matriz[pos[0][0]][pos[0][1]]=0;
+                matriz[pos[1][0]][pos[1][1]]=0;
+                matriz[pos[2][0]][pos[2][1]]=0;
+                matriz[pos[3][0]][pos[3][1]]=0;
+
+                pos[0][1]--;
+                pos[1][1]--;
+                pos[2][1]--;
+                pos[3][1]--;
+
+                matriz[pos[0][0]][pos[0][1]]=figura+1;
+                matriz[pos[1][0]][pos[1][1]]=figura+1;
+                matriz[pos[2][0]][pos[2][1]]=figura+1;
+                matriz[pos[3][0]][pos[3][1]]=figura+1;
+              }
+            break;
+    }
+}
 void keyboard(unsigned char key, int xMouse, int yMouse){
-  switch(key)
+    switch(key)
     {
-    case 'd':
+        case 'd':
     case 'D':
-      if(x<COLUMNAS-1 && matriz[x+1][y]==0){
-        x++;
-        matriz[x][y]=1;
-        matriz[x-1][y]=0;
+      if(pos[checaDer[0]][0]<COLUMNAS-1 && 
+        pos[checaDer[1]][0]<COLUMNAS-1 && 
+        pos[checaDer[2]][0]<COLUMNAS-1 && 
+        pos[checaDer[3]][0]<COLUMNAS-1 && 
+        matriz[pos[checaDer[0]][0]+1][pos[checaDer[0]][1]]==0 && 
+        matriz[pos[checaDer[1]][0]+1][pos[checaDer[1]][1]]==0 && 
+        matriz[pos[checaDer[2]][0]+1][pos[checaDer[2]][1]]==0 && 
+        matriz[pos[checaDer[3]][0]+1][pos[checaDer[3]][1]]==0){
+
+        matriz[pos[0][0]][pos[0][1]]=0;
+        matriz[pos[1][0]][pos[1][1]]=0;
+        matriz[pos[2][0]][pos[2][1]]=0;
+        matriz[pos[3][0]][pos[3][1]]=0;
+
+        pos[0][0]++;
+        pos[1][0]++;
+        pos[2][0]++;
+        pos[3][0]++;
+
+        matriz[pos[0][0]][pos[0][1]]=figura+1;
+        matriz[pos[1][0]][pos[1][1]]=figura+1;
+        matriz[pos[2][0]][pos[2][1]]=figura+1;
+        matriz[pos[3][0]][pos[3][1]]=figura+1;
       }
       break;
 
     case 'a':
     case 'A':
-      if(x>0 && matriz[x-1][y]==0){
-        x--;
-        matriz[x][y]=1;
-        matriz[x+1][y]=0;
+      if(pos[checaIzq[0]][0]>0 && 
+        pos[checaIzq[1]][0]>0 && 
+        pos[checaIzq[2]][0]>0 && 
+        pos[checaIzq[3]][0]>0 && 
+        matriz[pos[checaIzq[0]][0]-1][pos[checaIzq[0]][1]]==0 && 
+        matriz[pos[checaIzq[1]][0]-1][pos[checaIzq[1]][1]]==0 && 
+        matriz[pos[checaIzq[2]][0]-1][pos[checaIzq[2]][1]]==0 && 
+        matriz[pos[checaIzq[3]][0]-1][pos[checaIzq[3]][1]]==0){
+
+        matriz[pos[0][0]][pos[0][1]]=0;
+        matriz[pos[1][0]][pos[1][1]]=0;
+        matriz[pos[2][0]][pos[2][1]]=0;
+        matriz[pos[3][0]][pos[3][1]]=0;
+
+        pos[0][0]--;
+        pos[1][0]--;
+        pos[2][0]--;
+        pos[3][0]--;
+
+        matriz[pos[0][0]][pos[0][1]]=figura+1;
+        matriz[pos[1][0]][pos[1][1]]=figura+1;
+        matriz[pos[2][0]][pos[2][1]]=figura+1;
+        matriz[pos[3][0]][pos[3][1]]=figura+1;
       }
       break;
     case 's':
     case 'S':
-      if(y>0 && matriz[x][y-1]==0){
-        y--;
-        matriz[x][y]=1;
-        matriz[x][y+1]=0;
+      if(pos[0][1]>0 && 
+        pos[1][1]>0 && 
+        pos[2][1]>0 && 
+        pos[3][1]>0 && 
+        matriz[pos[checaAbajo[0]][0]][pos[checaAbajo[0]][1]-1]==0 && 
+        matriz[pos[checaAbajo[1]][0]][pos[checaAbajo[1]][1]-1]==0 && 
+        matriz[pos[checaAbajo[2]][0]][pos[checaAbajo[2]][1]-1]==0 ){
+
+        matriz[pos[0][0]][pos[0][1]]=0;
+        matriz[pos[1][0]][pos[1][1]]=0;
+        matriz[pos[2][0]][pos[2][1]]=0;
+        matriz[pos[3][0]][pos[3][1]]=0;
+
+        pos[0][1]--;
+        pos[1][1]--;
+        pos[2][1]--;
+        pos[3][1]--;
+
+        matriz[pos[0][0]][pos[0][1]]=figura+1;
+        matriz[pos[1][0]][pos[1][1]]=figura+1;
+        matriz[pos[2][0]][pos[2][1]]=figura+1;
+        matriz[pos[3][0]][pos[3][1]]=figura+1;
       }
       break;
-
-    case 27:   // escape
-      exit(0);
-      break;
+        case 'r':
+        case 'R':
+            vuelta++;
+            break;
+            
+        case 27:   // escape
+            exit(0);
+            break;
     }
 }
 
 void procesaMenu(int val){
-  switch(val)
-  {
-    case 10:
-      exit(0);
-    break;
-
-    case 20:
-      limpia();
-      puntos=0;
-      x = rand() % COLUMNAS;
-      y = RENGLONES-1;
-      matriz[x][y]=1;
-    break;
-
-    case 30:
-    exit(0);
-    break;
-
-    case 40:
-    exit(0);
-    break;
-
-    default:
-    break;
-  }
+    switch(val)
+    {
+        case 10:
+            exit(0);
+            break;
+            
+        case 20:
+            limpia();
+            puntos=0;
+            nuevafigura();
+            colision = false;
+            lleno=false;
+            glutTimerFunc(300,myTimer,1);
+            break;
+            
+        case 30:
+            exit(0);
+            break;
+            
+        case 40:
+            exit(0);
+            break;
+            
+        default:
+            break;
+    }
 }
 
-int addMenues(){
-  int mainMenu;
-  mainMenu = glutCreateMenu(procesaMenu);
-  glutSetMenu(mainMenu);
-  glutAddMenuEntry("Salir", 10);
-  glutAddMenuEntry("Nuevo Juego", 20);
-  glutAddMenuEntry("Scoreboard", 30);
-  glutAddMenuEntry("Creditos", 40);
-  glutSetMenu(mainMenu);
-  glutAttachMenu(GLUT_RIGHT_BUTTON);
+void addMenues(){
+    int mainMenu;
+    mainMenu = glutCreateMenu(procesaMenu);
+    glutSetMenu(mainMenu);
+    glutAddMenuEntry("Salir", 10);
+    glutAddMenuEntry("Nuevo Juego", 20);
+    glutAddMenuEntry("Scoreboard", 30);
+    glutAddMenuEntry("Creditos", 40);
+    glutSetMenu(mainMenu);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 void mouse(int button, int state, int x, int y){
-  if(button == GLUT_RIGHT_BUTTON){
-    if(state == GLUT_DOWN){
-      pause = 1;
+    if(button == GLUT_RIGHT_BUTTON){
+        if(state == GLUT_DOWN){
+            pause = 1;
+        }
     }
-  }
 }
 
 void myReshape(int ancho, int alto)
 {
-    glEnable(GL_DEPTH_TEST);
-    //glViewport(0, 0, ancho, alto); /* Ventana */
+    
+    glViewport(0, 0, ancho, alto); /* Ventana */
     glMatrixMode(GL_PROJECTION); /* Sistema de coordenadas */
     glLoadIdentity();
-    glOrtho(-2, COLUMNAS+2, -2, RENGLONES+2,-10,10); /* izq, der, abajo, arriba, cerca, lejos */
+    glOrtho(-10, COLUMNAS+10, -10, RENGLONES+10,-10,10); /* izq, der, abajo, arriba, cerca, lejos */
+  //  glFrustum(0, COLUMNAS, 0, RENGLONES, 1, 10);
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glFrustum(0, COLUMNAS, 0, RENGLONES, -1, 1);
-    gluLookAt(0,0,0, 2,-2,-1,0, 1, 0);
+    //gluLookAt(-2,0,0, 1,-1,-1,0, 1, 0);
+   // gluLookAt(COLUMNAS/2.0,RENGLONES/2.0,-5, 2,RENGLONES/2,-1,0, 1, 0);
 }
 
+
+
 int main(int argc, char **argv){
-  glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE |GLUT_DEPTH| GLUT_RGB);
-  glutInitWindowPosition(50, 50);
-  glutInitWindowSize(WIDTH, HEIGHT);
-  glutCreateWindow("Tetris prueba");
-  init();
-  glutReshapeFunc(myReshape);
-  glutTimerFunc(200,myTimer,1);
-  glutKeyboardFunc(keyboard);
-  glutDisplayFunc(display);
-  addMenues();
-  glutMainLoop();
-  return 0;
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE |GLUT_DEPTH| GLUT_RGB);
+    glutInitWindowPosition(50, 50);
+    glutInitWindowSize(WIDTH, HEIGHT);
+    glutCreateWindow("Tetris prueba");
+    init();
+    glutReshapeFunc(myReshape);
+    glutTimerFunc(200,myTimer,1);
+    glutSpecialFunc(special);
+    glutKeyboardFunc(keyboard);
+    glutDisplayFunc(display);
+    addMenues();
+    glutMainLoop();
+    return 0;
 }

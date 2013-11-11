@@ -1,9 +1,9 @@
 /*
  Gerardo Chapa  -800249
  Norma Escobedo -805387
- 
+
  */
-//#include <windows.h>
+#include <windows.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -63,8 +63,8 @@ int pause = 0;
 void figuraO(int a, int b)
 {
   checaAbajo[0] = 2;
-  checaAbajo[1] = 3; 
-  checaAbajo[2] = 2; 
+  checaAbajo[1] = 3;
+  checaAbajo[2] = 2;
 
   checaArriba[0] = 0;
   checaArriba[1] = 1;
@@ -102,7 +102,7 @@ void figuraI(int a, int b)
 {
   checaAbajo[0] = 3;
   checaAbajo[1] = 3;
-  checaAbajo[2] = 3; 
+  checaAbajo[2] = 3;
 
   checaArriba[0] = 0;
   checaArriba[1] = 0;
@@ -140,7 +140,7 @@ void figuraL(int a, int b)
 {
   checaAbajo[0] = 3;
   checaAbajo[1] = 3;
-  checaAbajo[2] = 2; 
+  checaAbajo[2] = 2;
 
   checaArriba[0] = 0;
   checaArriba[1] = 3;
@@ -178,7 +178,7 @@ void figuraJ(int a, int b)
 {
   checaAbajo[0] = 3;
   checaAbajo[1] = 3;
-  checaAbajo[2] = 2; 
+  checaAbajo[2] = 2;
 
   checaArriba[0] = 0;
   checaArriba[1] = 3;
@@ -216,7 +216,7 @@ void figuraS(int a, int b)
 {
   checaAbajo[0] = 3;
   checaAbajo[1] = 2;
-  checaAbajo[2] = 1; 
+  checaAbajo[2] = 1;
 
   checaArriba[0] = 0;
   checaArriba[1] = 1;
@@ -254,7 +254,7 @@ void figuraT(int a, int b)
 {
   checaAbajo[0] = 3;
   checaAbajo[1] = 2;
-  checaAbajo[2] = 0; 
+  checaAbajo[2] = 0;
 
   checaArriba[0] = 0;
   checaArriba[1] = 1;
@@ -303,7 +303,7 @@ void nuevafigura()
   }
   figura=0;
   figuraSiguiente = rand() % 6;
-  
+
   printf("Figura------------");
   switch(figura)
   {
@@ -372,7 +372,7 @@ void imprimePos()
 void imprimePosMatMenos()
 {
   printf("Pos Mat\n");
-  printf("%d\n", matriz[pos[0][0]][pos[0][1]-1]); 
+  printf("%d\n", matriz[pos[0][0]][pos[0][1]-1]);
   printf("%d\n", matriz[pos[1][0]][pos[1][1]-1]);
   printf("%d\n", matriz[pos[2][0]][pos[2][1]-1]);
   printf("%d\n", matriz[pos[3][0]][pos[3][1]-1]);
@@ -421,8 +421,8 @@ void myTimer(int h)
     printf("------------------------------------\n");
     if(pause==0)
     {
-        if((pos[checaArriba[0]][1]<RENGLONES-1 && 
-          pos[checaArriba[1]][1]<RENGLONES-1 && 
+        if((pos[checaArriba[0]][1]<RENGLONES-1 &&
+          pos[checaArriba[1]][1]<RENGLONES-1 &&
           pos[checaArriba[2]][1]<RENGLONES-1) ||
           !colision)
         {
@@ -435,7 +435,7 @@ void myTimer(int h)
             if(matriz[pos[0][0]][pos[0][1]]>0 &&
             matriz[pos[1][0]][pos[1][1]]>0 &&
             matriz[pos[2][0]][pos[2][1]]>0 &&
-            matriz[pos[3][0]][pos[3][1]]>0 && 
+            matriz[pos[3][0]][pos[3][1]]>0 &&
             matriz[pos[checaAbajo[0]][0]][pos[checaAbajo[0]][1]-1]==0 &&
             matriz[pos[checaAbajo[1]][0]][pos[checaAbajo[1]][1]-1]==0 &&
             matriz[pos[checaAbajo[2]][0]][pos[checaAbajo[2]][1]-1]==0)
@@ -482,7 +482,7 @@ void myTimer(int h)
         }
         else
         {
-            printf("perdiste\n");
+            printf("perdiste : %d puntos\n",puntos);
               limpia();
               std::ofstream log("scores.txt", std::ios_base::app | std::ios_base::out);
               log << puntos << std::endl;
@@ -495,12 +495,12 @@ void myTimer(int h)
         glutPostRedisplay();
         glutTimerFunc(velocidad,myTimer,1);
     }
-    
+
 }
 
 
 void display(){
-    
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPushMatrix();
     switch(vuelta%4){
@@ -520,7 +520,7 @@ void display(){
             glRotated(-90,0,0,1);
             break;
     }
-    
+
     glColor3f(1.0,0.0,0.5);
     glBegin(GL_LINES);
     glVertex2i(0-0.5,0-.5);
@@ -532,7 +532,7 @@ void display(){
     glVertex2i(0,0);
     glVertex2i(COLUMNAS,0);
     glEnd();
-    
+
     glPushMatrix();
     glRotated(10,0,1,0);
     glRotated(10,1,0,0);
@@ -570,7 +570,7 @@ void init(){
     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseMaterial);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialf(GL_FRONT, GL_SHININESS, 125.0);
-    
+
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -580,16 +580,16 @@ void init(){
     glColor4fv(diffuseMaterial);
 }
 
-void special(int key, int x, int y){
-    switch (key) {
-        case GLUT_KEY_LEFT:
-           if(pos[checaIzq[0]][0]>0 && 
-            pos[checaIzq[1]][0]>0 && 
-            pos[checaIzq[2]][0]>0 && 
-            pos[checaIzq[3]][0]>0 && 
-            matriz[pos[checaIzq[0]][0]-1][pos[checaIzq[0]][1]]==0 && 
-            matriz[pos[checaIzq[1]][0]-1][pos[checaIzq[1]][1]]==0 && 
-            matriz[pos[checaIzq[2]][0]-1][pos[checaIzq[2]][1]]==0 && 
+void mueve(int n){
+    //Izquierda
+    if(n==0){
+            if(pos[checaIzq[0]][0]>0 &&
+            pos[checaIzq[1]][0]>0 &&
+            pos[checaIzq[2]][0]>0 &&
+            pos[checaIzq[3]][0]>0 &&
+            matriz[pos[checaIzq[0]][0]-1][pos[checaIzq[0]][1]]==0 &&
+            matriz[pos[checaIzq[1]][0]-1][pos[checaIzq[1]][1]]==0 &&
+            matriz[pos[checaIzq[2]][0]-1][pos[checaIzq[2]][1]]==0 &&
             matriz[pos[checaIzq[3]][0]-1][pos[checaIzq[3]][1]]==0)
             {
                 matriz[pos[0][0]][pos[0][1]]=0;
@@ -607,15 +607,16 @@ void special(int key, int x, int y){
                 matriz[pos[2][0]][pos[2][1]]=figura+1;
                 matriz[pos[3][0]][pos[3][1]]=figura+1;
             }
-            break;
-        case GLUT_KEY_RIGHT:
-            if(pos[checaDer[0]][0]<COLUMNAS-1 && 
-            pos[checaDer[1]][0]<COLUMNAS-1 && 
-            pos[checaDer[2]][0]<COLUMNAS-1 && 
-            pos[checaDer[3]][0]<COLUMNAS-1 && 
-            matriz[pos[checaDer[0]][0]+1][pos[checaDer[0]][1]]==0 && 
-            matriz[pos[checaDer[1]][0]+1][pos[checaDer[1]][1]]==0 && 
-            matriz[pos[checaDer[2]][0]+1][pos[checaDer[2]][1]]==0 && 
+    }
+    //Derecha
+    else if(n==1){
+        if(pos[checaDer[0]][0]<COLUMNAS-1 &&
+            pos[checaDer[1]][0]<COLUMNAS-1 &&
+            pos[checaDer[2]][0]<COLUMNAS-1 &&
+            pos[checaDer[3]][0]<COLUMNAS-1 &&
+            matriz[pos[checaDer[0]][0]+1][pos[checaDer[0]][1]]==0 &&
+            matriz[pos[checaDer[1]][0]+1][pos[checaDer[1]][1]]==0 &&
+            matriz[pos[checaDer[2]][0]+1][pos[checaDer[2]][1]]==0 &&
             matriz[pos[checaDer[3]][0]+1][pos[checaDer[3]][1]]==0)
             {
                 matriz[pos[0][0]][pos[0][1]]=0;
@@ -633,14 +634,15 @@ void special(int key, int x, int y){
                 matriz[pos[2][0]][pos[2][1]]=figura+1;
                 matriz[pos[3][0]][pos[3][1]]=figura+1;
               }
-            break;
-        case GLUT_KEY_DOWN:
-			if(pos[0][1]>0 && 
-            pos[1][1]>0 && 
-            pos[2][1]>0 && 
-            pos[3][1]>0 && 
-            matriz[pos[checaAbajo[0]][0]][pos[checaAbajo[0]][1]-1]==0 && 
-            matriz[pos[checaAbajo[1]][0]][pos[checaAbajo[1]][1]-1]==0 && 
+    }
+    //Abajo
+    else if(n==2){
+        if(pos[0][1]>0 &&
+            pos[1][1]>0 &&
+            pos[2][1]>0 &&
+            pos[3][1]>0 &&
+            matriz[pos[checaAbajo[0]][0]][pos[checaAbajo[0]][1]-1]==0 &&
+            matriz[pos[checaAbajo[1]][0]][pos[checaAbajo[1]][1]-1]==0 &&
             matriz[pos[checaAbajo[2]][0]][pos[checaAbajo[2]][1]-1]==0 )
             {
                 matriz[pos[0][0]][pos[0][1]]=0;
@@ -658,6 +660,74 @@ void special(int key, int x, int y){
                 matriz[pos[2][0]][pos[2][1]]=figura+1;
                 matriz[pos[3][0]][pos[3][1]]=figura+1;
               }
+    }
+}
+
+void special(int key, int x, int y){
+    switch (key) {
+        case GLUT_KEY_LEFT:
+           switch (vuelta%4){
+               case 0:
+                   mueve(0);
+                   break;
+               case 1:
+                   vuelta++;
+                   break;
+               case 2:
+                   mueve(1);
+                   break;
+               case 3:
+                   mueve(2);
+                   break;
+           }
+            break;
+        case GLUT_KEY_RIGHT:
+            switch (vuelta%4){
+               case 0:
+                   mueve(1);
+                   break;
+               case 1:
+                   mueve(2);
+                   break;
+               case 2:
+                   mueve(0);
+                   break;
+               case 3:
+                   vuelta++;
+                   break;
+           }
+            break;
+        case GLUT_KEY_UP:
+            switch (vuelta%4){
+               case 0:
+                   vuelta++;
+                   break;
+               case 1:
+                   mueve(1);
+                   break;
+               case 2:
+                   mueve(2);
+                   break;
+               case 3:
+                   mueve(0);
+                   break;
+           }
+            break;
+        case GLUT_KEY_DOWN:
+			switch (vuelta%4){
+               case 0:
+                   mueve(2);
+                   break;
+               case 1:
+                   mueve(0);
+                   break;
+               case 2:
+                   vuelta++;
+                   break;
+               case 3:
+                   mueve(1);
+                   break;
+           }
             break;
     }
 }
@@ -666,13 +736,13 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
     {
         case 'd':
     case 'D':
-      if(pos[checaDer[0]][0]<COLUMNAS-1 && 
-        pos[checaDer[1]][0]<COLUMNAS-1 && 
-        pos[checaDer[2]][0]<COLUMNAS-1 && 
-        pos[checaDer[3]][0]<COLUMNAS-1 && 
-        matriz[pos[checaDer[0]][0]+1][pos[checaDer[0]][1]]==0 && 
-        matriz[pos[checaDer[1]][0]+1][pos[checaDer[1]][1]]==0 && 
-        matriz[pos[checaDer[2]][0]+1][pos[checaDer[2]][1]]==0 && 
+      if(pos[checaDer[0]][0]<COLUMNAS-1 &&
+        pos[checaDer[1]][0]<COLUMNAS-1 &&
+        pos[checaDer[2]][0]<COLUMNAS-1 &&
+        pos[checaDer[3]][0]<COLUMNAS-1 &&
+        matriz[pos[checaDer[0]][0]+1][pos[checaDer[0]][1]]==0 &&
+        matriz[pos[checaDer[1]][0]+1][pos[checaDer[1]][1]]==0 &&
+        matriz[pos[checaDer[2]][0]+1][pos[checaDer[2]][1]]==0 &&
         matriz[pos[checaDer[3]][0]+1][pos[checaDer[3]][1]]==0){
 
         matriz[pos[0][0]][pos[0][1]]=0;
@@ -694,13 +764,13 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
 
     case 'a':
     case 'A':
-      if(pos[checaIzq[0]][0]>0 && 
-        pos[checaIzq[1]][0]>0 && 
-        pos[checaIzq[2]][0]>0 && 
-        pos[checaIzq[3]][0]>0 && 
-        matriz[pos[checaIzq[0]][0]-1][pos[checaIzq[0]][1]]==0 && 
-        matriz[pos[checaIzq[1]][0]-1][pos[checaIzq[1]][1]]==0 && 
-        matriz[pos[checaIzq[2]][0]-1][pos[checaIzq[2]][1]]==0 && 
+      if(pos[checaIzq[0]][0]>0 &&
+        pos[checaIzq[1]][0]>0 &&
+        pos[checaIzq[2]][0]>0 &&
+        pos[checaIzq[3]][0]>0 &&
+        matriz[pos[checaIzq[0]][0]-1][pos[checaIzq[0]][1]]==0 &&
+        matriz[pos[checaIzq[1]][0]-1][pos[checaIzq[1]][1]]==0 &&
+        matriz[pos[checaIzq[2]][0]-1][pos[checaIzq[2]][1]]==0 &&
         matriz[pos[checaIzq[3]][0]-1][pos[checaIzq[3]][1]]==0){
 
         matriz[pos[0][0]][pos[0][1]]=0;
@@ -721,12 +791,12 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
       break;
     case 's':
     case 'S':
-      if(pos[0][1]>0 && 
-        pos[1][1]>0 && 
-        pos[2][1]>0 && 
-        pos[3][1]>0 && 
-        matriz[pos[checaAbajo[0]][0]][pos[checaAbajo[0]][1]-1]==0 && 
-        matriz[pos[checaAbajo[1]][0]][pos[checaAbajo[1]][1]-1]==0 && 
+      if(pos[0][1]>0 &&
+        pos[1][1]>0 &&
+        pos[2][1]>0 &&
+        pos[3][1]>0 &&
+        matriz[pos[checaAbajo[0]][0]][pos[checaAbajo[0]][1]-1]==0 &&
+        matriz[pos[checaAbajo[1]][0]][pos[checaAbajo[1]][1]-1]==0 &&
         matriz[pos[checaAbajo[2]][0]][pos[checaAbajo[2]][1]-1]==0 ){
 
         matriz[pos[0][0]][pos[0][1]]=0;
@@ -749,7 +819,7 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
         case 'R':
             vuelta++;
             break;
-            
+
         case 27:   // escape
             exit(0);
             break;
@@ -762,7 +832,7 @@ void procesaMenu(int val){
         case 10:
             exit(0);
             break;
-            
+
         case 20:
             limpia();
             puntos=0;
@@ -771,15 +841,15 @@ void procesaMenu(int val){
             lleno=false;
             glutTimerFunc(300,myTimer,1);
             break;
-            
+
         case 30:
             exit(0);
             break;
-            
+
         case 40:
             exit(0);
             break;
-            
+
         default:
             break;
     }
@@ -807,11 +877,11 @@ void mouse(int button, int state, int x, int y){
 
 void myReshape(int ancho, int alto)
 {
-    
+
     glViewport(0, 0, ancho, alto); /* Ventana */
     glMatrixMode(GL_PROJECTION); /* Sistema de coordenadas */
     glLoadIdentity();
-    glOrtho(-10, COLUMNAS+10, -10, RENGLONES+10,-10,10); /* izq, der, abajo, arriba, cerca, lejos */
+    glOrtho(-5, COLUMNAS+5, -10, RENGLONES+10,-10,10); /* izq, der, abajo, arriba, cerca, lejos */
   //  glFrustum(0, COLUMNAS, 0, RENGLONES, 1, 10);
 
     glMatrixMode(GL_MODELVIEW);

@@ -301,7 +301,6 @@ void nuevafigura()
   {
     figura = figuraSiguiente;
   }
-  figura=0;
   figuraSiguiente = rand() % 6;
   
   printf("Figura------------");
@@ -546,12 +545,45 @@ void display(){
             glVertex3i(0, renglon, 0);
             glVertex3i(COLUMNAS, renglon, 0);
             glEnd();*/
-            if(matriz[columna][renglon]==1){
-                glPushMatrix();
-                glTranslated(columna + 0.5, renglon+0.5, 0);
-                glutSolidCube(1);
-                glPopMatrix();
-            }
+	    switch(matriz[columna][renglon])
+      {
+          case 1:
+          glPushMatrix();
+          glTranslated(columna + 0.5, renglon+0.5, 0);
+          glutSolidCube(1);
+          glPopMatrix();
+          break;
+          case 2:
+          glPushMatrix();
+          glTranslated(columna + 0.5, renglon+0.5, 0);
+          glutSolidCube(1);
+          glPopMatrix();
+          break;
+          case 3:
+          glPushMatrix();
+          glTranslated(columna + 0.5, renglon+0.5, 0);
+          glutSolidCube(1);
+          glPopMatrix();
+          break;
+          case 4:
+          glPushMatrix();
+          glTranslated(columna + 0.5, renglon+0.5, 0);
+          glutSolidCube(1);
+          glPopMatrix();
+          break;
+          case 5:
+          glPushMatrix();
+          glTranslated(columna + 0.5, renglon+0.5, 0);
+          glutSolidCube(1);
+          glPopMatrix();
+          break;
+          case 6:
+          glPushMatrix();
+          glTranslated(columna + 0.5, renglon+0.5, 0);
+          glutSolidCube(1);
+          glPopMatrix();
+          break;
+      }
         }
     }
     glPopMatrix();

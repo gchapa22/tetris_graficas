@@ -40,7 +40,7 @@ static int matriz[COLUMNAS][RENGLONES]  = {0,0,0,0,0,0,0,0,
 
 GLfloat diffuseMaterial[4] = { 1.0, 0.0, 0.5, 1.0 };
 
-static GLuint texName[1];
+static GLuint texName[7];
 
 int pos[4][2] = {0,0,0,0,
                   0,0,0,0};
@@ -502,6 +502,139 @@ void myTimer(int h)
 
 }
 
+void pintaFondo(){
+    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
+    glDisable(GL_COLOR_MATERIAL);
+    glColor3f(1,1,1);
+    glBindTexture(GL_TEXTURE_2D, texName[0]);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(-5.0f, -1.0f, 0.0f);
+         glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(COLUMNAS+4, -1.0f, 0.0f);
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex3f(COLUMNAS+4, RENGLONES+5, 0.0f);
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex3f(-5.0f, RENGLONES+5, 0.0f);
+        glEnd();
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glColor4fv(diffuseMaterial);
+
+}
+void pintaCubo(int figura, int x, int y){
+    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
+    glDisable(GL_COLOR_MATERIAL);
+    glColor3f(1,1,1);
+    glBindTexture(GL_TEXTURE_2D, texName[figura]);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    // Frente
+    glNormal3f( 0.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(x, y,  1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f( x+1, y,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( x+1,  y+1,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(x,  y+1,  1.0f);
+
+
+    // parte de Atras
+    glNormal3f( 0.0f, 0.0f,-1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(x, y, -1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(x,  y+1, -1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f( x+1,  y+1, -1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f( x+1, y, -1.0f);
+
+
+    // Arriba
+    glNormal3f( 0.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(x,  y+1, -1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(x,  y+1,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( x+1,  y+1,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( x+1,  y+1, -1.0f);
+    // Abajo
+    glNormal3f( 0.0f,-1.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(x, y, -1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f( x+1, y, -1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f( x+1, y,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(x, y,  1.0f);
+    // lado Derecho
+    glNormal3f( 1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( x+1, y, -1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( x+1,  y+1, -1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f( x+1,  y+1,  1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f( x+1, y,  1.0f);
+    // Lado Izquierdo
+    glNormal3f(-1.0f, 0.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(x, y, -1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(x, y,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(x,  y+1,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(x,  y+1, -1.0f);
+    glEnd();
+    glPopMatrix();
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glColor4fv(diffuseMaterial);
+}
+void pintaGrid(){
+    glColor3f(1.0,0.0,0.5);
+    glBegin(GL_LINES);
+    glVertex2i(0-0.5,0-.5);
+    glVertex2i(0-0.5,RENGLONES+.5);
+    glVertex2i(COLUMNAS+0.5, 0);
+    glVertex2i(COLUMNAS+0.5, RENGLONES);
+    glVertex2i(0, RENGLONES);
+    glVertex2i(COLUMNAS, RENGLONES);
+    glVertex2i(0,0);
+    glVertex2i(COLUMNAS,0);
+    glEnd();
+
+    glPushMatrix();
+    glRotated(10,0,1,0);
+    glRotated(10,1,0,0);
+    for(int columna=0; columna<COLUMNAS; columna++){
+        for(int renglon=0 ; renglon<RENGLONES; renglon++){
+            if(matriz[columna][renglon] >0 && matriz[columna][renglon]<7)
+                pintaCubo(matriz[columna][renglon],columna, renglon);
+
+        }
+    }
+    glPopMatrix();
+}
 void displayScore(){
     int le, qs;
     glColor3f(0,1,1);
@@ -524,6 +657,7 @@ void displayScore(){
 void display(){
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    pintaFondo();
     displayScore();
 
     glPushMatrix();
@@ -545,67 +679,7 @@ void display(){
             break;
     }
 
-    glColor3f(1.0,0.0,0.5);
-    glBegin(GL_LINES);
-    glVertex2i(0-0.5,0-.5);
-    glVertex2i(0-0.5,RENGLONES+.5);
-    glVertex2i(COLUMNAS+0.5, 0);
-    glVertex2i(COLUMNAS+0.5, RENGLONES);
-    glVertex2i(0, RENGLONES);
-    glVertex2i(COLUMNAS, RENGLONES);
-    glVertex2i(0,0);
-    glVertex2i(COLUMNAS,0);
-    glEnd();
-
-    glPushMatrix();
-    glRotated(10,0,1,0);
-    glRotated(10,1,0,0);
-    for(int columna=0; columna<COLUMNAS; columna++){
-        for(int renglon=0 ; renglon<RENGLONES; renglon++){
-
-
-	    switch(matriz[columna][renglon])
-      {
-          case 1:
-          glPushMatrix();
-          glTranslated(columna + 0.5, renglon+0.5, 0);
-          glutSolidCube(1);
-          glPopMatrix();
-          break;
-          case 2:
-          glPushMatrix();
-          glTranslated(columna + 0.5, renglon+0.5, 0);
-          glutSolidCube(1);
-          glPopMatrix();
-          break;
-          case 3:
-          glPushMatrix();
-          glTranslated(columna + 0.5, renglon+0.5, 0);
-          glutSolidCube(1);
-          glPopMatrix();
-          break;
-          case 4:
-          glPushMatrix();
-          glTranslated(columna + 0.5, renglon+0.5, 0);
-          glutSolidCube(1);
-          glPopMatrix();
-          break;
-          case 5:
-          glPushMatrix();
-          glTranslated(columna + 0.5, renglon+0.5, 0);
-          glutSolidCube(1);
-          glPopMatrix();
-          break;
-          case 6:
-          glPushMatrix();
-          glTranslated(columna + 0.5, renglon+0.5, 0);
-          glutSolidCube(1);
-          glPopMatrix();
-          break;
-      }
-        }
-    }
-    glPopMatrix();
+    pintaGrid();
     glPopMatrix();
     glutSwapBuffers();
 }
@@ -892,10 +966,16 @@ void initRendering()
     glEnable(GL_TEXTURE_2D);
 
     // glEnable(GL_COLOR_MATERIAL);
-    glGenTextures(1, texName); //Make room for our texture
+    glGenTextures(7, texName); //Make room for our texture
     Image* image;
 
-    image = loadBMP("C:/Users/nOrmss/Dropbox/TEC/Semestre9/Graficas/Proyecto/tetris_graficas/PrimerAvance/imagenes/tetris.bmp");loadTexture(image,i++);
+    image = loadBMP("C:/Users/nOrmss/Dropbox/TEC/Semestre9/Graficas/Proyecto/tetris_graficas/PrimerAvance/imagenes/fondo.bmp");loadTexture(image,i++);
+    image = loadBMP("C:/Users/nOrmss/Dropbox/TEC/Semestre9/Graficas/Proyecto/tetris_graficas/PrimerAvance/imagenes/color1.bmp");loadTexture(image,i++);
+    image = loadBMP("C:/Users/nOrmss/Dropbox/TEC/Semestre9/Graficas/Proyecto/tetris_graficas/PrimerAvance/imagenes/color2.bmp");loadTexture(image,i++);
+    image = loadBMP("C:/Users/nOrmss/Dropbox/TEC/Semestre9/Graficas/Proyecto/tetris_graficas/PrimerAvance/imagenes/color3.bmp");loadTexture(image,i++);
+    image = loadBMP("C:/Users/nOrmss/Dropbox/TEC/Semestre9/Graficas/Proyecto/tetris_graficas/PrimerAvance/imagenes/color4.bmp");loadTexture(image,i++);
+    image = loadBMP("C:/Users/nOrmss/Dropbox/TEC/Semestre9/Graficas/Proyecto/tetris_graficas/PrimerAvance/imagenes/color5.bmp");loadTexture(image,i++);
+    image = loadBMP("C:/Users/nOrmss/Dropbox/TEC/Semestre9/Graficas/Proyecto/tetris_graficas/PrimerAvance/imagenes/color6.bmp");loadTexture(image,i++);
     delete image;
 }
 
@@ -907,7 +987,7 @@ int main(int argc, char **argv){
     glutInitWindowSize(WIDTH, HEIGHT);
     glutCreateWindow("Tetris prueba");
     init();
-   // initRendering();
+    initRendering();
     glutReshapeFunc(myReshape);
     glutTimerFunc(200,myTimer,1);
     glutSpecialFunc(special);

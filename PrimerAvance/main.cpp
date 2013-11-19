@@ -341,6 +341,319 @@ void nuevafigura()
   }
 }
 
+void volteaFigura()
+{
+  vuelta++;
+  numVuelta++;
+  int aux = 0;
+  int aux2 = 0;
+  switch(figura)
+  {
+    case 0:
+    //no da vuelta
+    break;
+    case 1:
+    //figuraI
+
+    matriz[pos[0][0]][pos[0][1]] = 0;
+    matriz[pos[1][0]][pos[1][1]] = 0;
+    matriz[pos[2][0]][pos[2][1]] = 0;
+    matriz[pos[3][0]][pos[3][1]] = 0;
+
+    switch(numVuelta)
+    {
+      case 1:
+        if(matriz[pos[0][0]-1][pos[2][1]] == 0 and
+          matriz[pos[0][0]][pos[2][1]] == 0 and
+          matriz[pos[0][0]+1][pos[2][1]] == 0 and
+          matriz[pos[0][0]+2][pos[2][1]] == 0)
+        {
+          aux = pos[0][0];
+          pos[0][0] = pos[0][0]-1;
+          pos[0][1] = pos[2][1];
+
+          //aux = pos[1][0];
+          pos[1][0] = aux;
+          pos[1][1] = pos[2][1] ;
+
+          //aux = pos[2][0];
+          pos[2][0] = aux+1;
+          pos[2][1] = pos[2][1];
+
+          //aux = pos[3][0];
+          pos[3][0] = aux+2;
+          pos[3][1] = pos[2][1];
+
+          checaAbajo[0] = 0;
+          checaAbajo[1] = 1;
+          checaAbajo[2] = 2;
+          checaAbajo[3] = 3;
+
+          checaArriba[0] = 0;
+          checaArriba[1] = 1;
+          checaArriba[2] = 2;
+          checaArriba[2] = 3;
+
+          checaIzq[0] = 0;
+          checaIzq[1] = 0;
+          checaIzq[2] = 0;
+          checaIzq[3] = 0;
+
+          checaDer[0] = 3;
+          checaDer[1] = 3;
+          checaDer[2] = 3;
+          checaDer[3] = 3;
+        }
+        else
+        {
+          vuelta-=1;
+          numVuelta-=1;
+        }
+      break;
+      case 2:
+      if(matriz[pos[1][0]][pos[0][1]+2] == 0 and
+          matriz[pos[1][0]][pos[0][1]+1] == 0 and
+          matriz[pos[1][0]][pos[2][1]] == 0 and
+          matriz[pos[1][0]][pos[2][1]-1] == 0)
+        {
+          aux = pos[1][0];
+          pos[0][0] = aux;
+          pos[0][1]+= 2;
+
+          //aux = pos[1][0];
+          pos[1][0] = aux;
+          pos[1][1]+= 1;
+
+          //aux = pos[2][0];
+          pos[2][0] = aux;
+          pos[2][1] = pos[2][1];
+
+          //aux = pos[3][0];
+          pos[3][0] = aux;
+          pos[3][1] = pos[2][1]-1;
+          numVuelta=0;
+          checaAbajo[0] = 3;
+          checaAbajo[1] = 3;
+          checaAbajo[2] = 3;
+          checaAbajo[3] = 3;
+
+          checaArriba[0] = 0;
+          checaArriba[1] = 0;
+          checaArriba[2] = 0;
+          checaArriba[3] = 0;
+
+          checaIzq[0] = 0;
+          checaIzq[1] = 1;
+          checaIzq[2] = 2;
+          checaIzq[3] = 3;
+
+          checaDer[0] = 0;
+          checaDer[1] = 1;
+          checaDer[2] = 2;
+          checaDer[3] = 3;
+        }
+        else
+        {
+          vuelta-=1;
+          numVuelta-=1;
+        }
+        break;
+    }
+    matriz[pos[0][0]][pos[0][1]] = figura+1;
+    matriz[pos[1][0]][pos[1][1]] = figura+1;
+    matriz[pos[2][0]][pos[2][1]] = figura+1;
+    matriz[pos[3][0]][pos[3][1]] = figura+1;
+    break;
+    case 2:
+    //figuraL
+    matriz[pos[0][0]][pos[0][1]] = 0;
+    matriz[pos[1][0]][pos[1][1]] = 0;
+    matriz[pos[2][0]][pos[2][1]] = 0;
+    matriz[pos[3][0]][pos[3][1]] = 0;
+    switch(numVuelta)
+    {
+      case 1:
+      if(matriz[pos[0][0]][pos[2][1]] == 0 and
+          matriz[pos[1][0]][pos[2][1]] == 0 and
+          matriz[pos[2][0]+1][pos[2][1]] == 0 and
+          matriz[pos[3][0]+1][pos[2][1]] == 0)
+        {
+          aux = pos[2][1];
+          pos[0][0]= pos[0][0];
+          pos[0][1] = aux-1;
+
+          pos[1][0] = pos[1][0];
+          pos[1][1] = aux;
+
+          pos[2][0] += 1;
+          pos[2][1] = aux;
+
+          pos[3][0] += 1;
+          pos[3][1] = aux;
+
+          checaAbajo[0] = 1;
+          checaAbajo[1] = 2;
+          checaAbajo[2] = 3;
+          checaAbajo[3] = 3;
+
+          checaArriba[0] = 0;
+          checaArriba[1] = 2;
+          checaArriba[2] = 3;
+          checaArriba[3] = 3;
+
+          checaIzq[0] = 0;
+          checaIzq[1] = 0;
+          checaIzq[2] = 3;
+          checaIzq[3] = 3;
+
+          checaDer[0] = 0;
+          checaDer[1] = 1;
+          checaDer[2] = 3;
+          checaDer[3] = 3;
+      }
+      else
+        {
+          vuelta-=1;
+          numVuelta-=1;
+        }
+        break;
+      case 2:
+      if(matriz[pos[0][0]][pos[2][1]] == 0 and
+          matriz[pos[1][0]][pos[2][1]] == 0 and
+          matriz[pos[2][0]+1][pos[2][1]] == 0 and
+          matriz[pos[3][0]+1][pos[2][1]] == 0)
+        {
+          aux = pos[0][1];
+          aux2 = pos[1][0];
+          pos[0][0] = aux2-1;
+          pos[0][1] = aux+2;
+
+          pos[1][0] = aux2;
+          pos[1][1] = aux+2;
+
+          pos[2][0] = aux2;
+          pos[2][1] = aux+1;
+
+          pos[3][0] = aux2;
+          pos[3][1] = aux;
+        }
+      else
+        {
+          vuelta-=1;
+          numVuelta-=1;
+        }
+        break;
+      case 3:
+        if(matriz[pos[0][0]][pos[2][1]] == 0 and
+            matriz[pos[1][0]][pos[2][1]] == 0 and
+            matriz[pos[2][0]+1][pos[2][1]] == 0 and
+            matriz[pos[3][0]+1][pos[2][1]] == 0)
+          {
+            aux2 = pos[2][1];
+            aux =  pos[1][0];
+
+            pos[0][0] = aux-1;
+            pos[0][1] = aux2-1;
+
+            pos[1][0] = aux-1;
+            pos[1][1] = aux2;
+
+            pos[2][0] = aux;
+            pos[2][1] = aux2;
+
+            pos[3][0] = aux+1;
+            pos[3][1] = aux2;
+            numVuelta = 0;
+          }
+        else
+          {
+            vuelta-=1;
+            numVuelta-=1;
+          }
+        break;
+    }
+
+    matriz[pos[0][0]][pos[0][1]] = figura+1;
+    matriz[pos[1][0]][pos[1][1]] = figura+1;
+    matriz[pos[2][0]][pos[2][1]] = figura+1;
+    matriz[pos[3][0]][pos[3][1]] = figura+1;
+
+    break;
+    case 3:
+    //figuraJ
+
+    matriz[pos[0][0]][pos[0][1]] = 0;
+    matriz[pos[1][0]][pos[1][1]] = 0;
+    matriz[pos[2][0]][pos[2][1]] = 0;
+    matriz[pos[3][0]][pos[3][1]] = 0;
+
+    pos[0][0] = 1;
+    pos[0][1] = 1;
+    pos[1][0] = 1;
+    pos[1][1] = 1;
+    pos[2][0] = 1;
+    pos[2][1] = 1;
+    pos[3][0] = 1;
+    pos[3][1] = 1;
+
+    matriz[pos[0][0]][pos[0][1]] = figura+1;
+    matriz[pos[1][0]][pos[1][1]] = figura+1;
+    matriz[pos[2][0]][pos[2][1]] = figura+1;
+    matriz[pos[3][0]][pos[3][1]] = figura+1;
+
+    break;
+    case 4:
+    //figuraS
+
+    matriz[pos[0][0]][pos[0][1]] = 0;
+    matriz[pos[1][0]][pos[1][1]] = 0;
+    matriz[pos[2][0]][pos[2][1]] = 0;
+    matriz[pos[3][0]][pos[3][1]] = 0;
+
+    pos[0][0] = 1;
+    pos[0][1] = 1;
+    pos[1][0] = 1;
+    pos[1][1] = 1;
+    pos[2][0] = 1;
+    pos[2][1] = 1;
+    pos[3][0] = 1;
+    pos[3][1] = 1;
+
+    matriz[pos[0][0]][pos[0][1]] = figura+1;
+    matriz[pos[1][0]][pos[1][1]] = figura+1;
+    matriz[pos[2][0]][pos[2][1]] = figura+1;
+    matriz[pos[3][0]][pos[3][1]] = figura+1;
+
+    break;
+    case 5:
+    //figuraT
+
+    matriz[pos[0][0]][pos[0][1]] = 0;
+    matriz[pos[1][0]][pos[1][1]] = 0;
+    matriz[pos[2][0]][pos[2][1]] = 0;
+    matriz[pos[3][0]][pos[3][1]] = 0;
+
+    pos[0][0] = 1;
+    pos[0][1] = 1;
+    pos[1][0] = 1;
+    pos[1][1] = 1;
+    pos[2][0] = 1;
+    pos[2][1] = 1;
+    pos[3][0] = 1;
+    pos[3][1] = 1;
+
+    matriz[pos[0][0]][pos[0][1]] = figura+1;
+    matriz[pos[1][0]][pos[1][1]] = figura+1;
+    matriz[pos[2][0]][pos[2][1]] = figura+1;
+    matriz[pos[3][0]][pos[3][1]] = figura+1;
+
+    break;
+    default:
+    printf("Ninguno\n");
+    break;
+  }
+}
+
 void limpia()
 {
     for(int x=0; x<COLUMNAS; x++){
@@ -852,7 +1165,7 @@ void keyboard(unsigned char key, int xMouse, int yMouse){
             break;
 
         case 32:   //Space Bar
-            vuelta++;
+            volteaFigura()
             break;
     }
 }
